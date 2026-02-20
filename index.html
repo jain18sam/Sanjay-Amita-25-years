@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>25 Years of Mummy & Papa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&family=Space+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-grad: linear-gradient(135deg, #f48fb1, #ffa726);
+            --overlay-grad: linear-gradient(135deg, rgba(244, 143, 177, 0.7), rgba(255, 167, 38, 0.6));
+            --dark-red: #d84315;
+            --brown-text: #6d4c41;
+            --dark-brown: #4e342e;
+            --bg-warm: #fff8f0;
+            --white: #ffffff;
+        }
+
+        body, html {
+            margin: 0; font-family: 'Montserrat', sans-serif;
+            color: #333; line-height: 1.6; scroll-behavior: smooth; overflow-x: hidden;
+            background: linear-gradient(to bottom, var(--bg-warm), var(--white));
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+        /* --- LANGUAGE TOGGLE BUTTON --- */
+        .lang-toggle {
+            position: fixed; top: 20px; right: 20px; z-index: 10000;
+            background: rgba(255,255,255,0.95); border: none;
+            color: var(--dark-red); padding: 10px 20px; border-radius: 50px;
+            font-family: 'Montserrat', sans-serif; font-weight: 700; cursor: pointer;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1); transition: transform 0.3s;
+        }
+        .lang-toggle:hover { transform: scale(1.05); }
+
+        /* --- HERO SECTION --- */
+        .hero-section {
+            position: relative; height: 100vh; display: flex; align-items: center; justify-content: center;
+            background-size: cover; background-position: center; background-attachment: fixed;
+        }
+        .hero-overlay {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--overlay-grad); backdrop-filter: blur(2px);
+        }
+        .hero-content {
+            position: relative; z-index: 2; text-align: center; color: var(--white);
+            padding: 40px; animation: fadeInUp 1.5s ease-out;
+        }
+        .hero-hearts { position: absolute; top: -80px; left: 50%; transform: translateX(-50%); display: flex; gap: 20px; }
+        .floating-heart { color: var(--white); font-size: 2rem; animation: float 3s ease-in-out infinite; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); }
+        .floating-heart.delay-1 { animation-delay: 0.5s; }
+        .floating-heart.delay-2 { animation-delay: 1s; }
+        
+        .hero-title { font-size: 5rem; font-weight: 800; margin-bottom: 16px; text-shadow: 2px 4px 8px rgba(0,0,0,0.3); letter-spacing: -1px; }
+        .hero-subtitle { font-size: 2rem; font-weight: 300; margin-bottom: 24px; text-shadow: 1px 2px 4px rgba(0,0,0,0.2); }
+        .hero-date {
+            display: inline-block; font-size: 1.5rem; font-weight: 700; padding: 12px 32px;
+            background: rgba(255,255,255,0.95); color: var(--dark-red); border-radius: 50px;
+            margin-bottom: 24px; box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        /* --- SECTION HEADERS --- */
+        .section-title { font-size: 3rem; font-weight: 700; text-align: center; color: var(--dark-red); margin-bottom: 16px; }
+        .section-subtitle { font-size: 1.25rem; text-align: center; color: var(--brown-text); margin-bottom: 64px; font-weight: 300; }
+
+        /* --- CHRONOMETER --- */
+        .chronometer-section { padding: 60px 20px; text-align: center; background: var(--white); }
+        .time-grid { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 20px; }
+        .time-box {
+            background: var(--bg-warm); border: 1px solid #ffe0b2; padding: 20px 30px; 
+            border-radius: 16px; min-width: 100px; box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+        }
+        .time-number { font-family: 'Space Mono', monospace; font-size: 2.5rem; color: var(--dark-red); font-weight: bold; }
+        .time-label { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; color: var(--brown-text); margin-top: 5px; font-weight: 600; }
+
+        /* --- BEAUTIFUL EVOLUTION SLIDER --- */
+        .comparison-section { padding: 100px 0; background: var(--bg-warm); text-align: center; }
+        .slider-container {
+            position: relative; width: 100%; max-width: 800px; height: 500px;
+            margin: 0 auto; overflow: hidden; border-radius: 16px; 
+            box-shadow: 0 12px 32px rgba(0,0,0,0.15); border: 4px solid var(--white);
+        }
+        .slider-img {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; object-position: center; pointer-events: none;
+        }
+        .img-after { z-index: 1; } 
+        .img-before { z-index: 2; width: 50%; border-right: 4px solid var(--white); } 
+        .slider-handle {
+            position: absolute; top: 0; bottom: 0; left: 50%; width: 40px;
+            transform: translateX(-50%); z-index: 3; cursor: ew-resize;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .slider-handle-circle {
+            width: 48px; height: 48px; background: var(--white); border-radius: 50%;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2); display: flex; align-items: center; justify-content: center; 
+            color: var(--dark-red); font-size: 1.2rem;
+        }
+
+        /* --- VISUALLY IMPROVED TIMELINE --- */
+        .timeline-section { padding: 100px 0; background: var(--white); }
+        .timeline { position: relative; padding: 40px 0; max-width: 1000px; margin: 0 auto; }
+        .timeline::before {
+            content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 4px;
+            background: var(--primary-grad); transform: translateX(-50%);
+        }
+        .timeline-item { position: relative; margin-bottom: 80px; width: 100%; }
+        .timeline-content { position: relative; display: flex; align-items: center; gap: 40px; }
+        .timeline-item.left .timeline-content { flex-direction: row; padding-right: 50%; }
+        .timeline-item.right .timeline-content { flex-direction: row-reverse; padding-left: 50%; }
+        
+        .timeline-icon {
+            position: absolute; left: 50%; transform: translateX(-50%); width: 60px; height: 60px;
+            background: var(--primary-grad); border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            color: var(--white); z-index: 2; box-shadow: 0 4px 16px rgba(244, 143, 177, 0.4); font-size: 1.5rem;
+        }
+        .timeline-image { flex-shrink: 0; width: 180px; height: 180px; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.15); border: 4px solid var(--white); }
+        .timeline-image img { width: 100%; height: 100%; object-fit: cover; }
+        
+        /* Enhanced Timeline Text Blocks */
+        .timeline-text { 
+            flex: 1; background: var(--bg-warm); padding: 40px; border-radius: 16px; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06); border: 1px solid #ffebee;
+        }
+        .timeline-year {
+            display: inline-block; font-size: 1.1rem; font-weight: 700; color: var(--white);
+            background: var(--primary-grad); padding: 8px 24px; border-radius: 30px; margin-bottom: 15px;
+            box-shadow: 0 4px 10px rgba(244, 143, 177, 0.3);
+        }
+        .timeline-title { font-size: 1.8rem; font-weight: 700; color: var(--dark-red); margin: 0 0 12px 0; font-family: 'Cormorant Garamond', serif; }
+        .timeline-description { font-size: 1.1rem; color: #555; margin: 0; line-height: 1.8; }
+
+        /* --- UNCROPPED MEMORY GALLERY (9 Slots) --- */
+        .memory-section { padding: 100px 0; background: var(--bg-warm); }
+        .memory-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .memory-card {
+            position: relative; overflow: hidden; border-radius: 16px; background: var(--white);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1); transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .memory-card:hover { transform: translateY(-8px); box-shadow: 0 12px 32px rgba(0,0,0,0.2); }
+        .memory-image-wrapper {
+            position: relative; width: 100%; height: 350px; 
+            display: flex; align-items: center; justify-content: center; padding: 10px; box-sizing: border-box;
+        }
+        .memory-image {
+            max-width: 100%; max-height: 100%; object-fit: contain; /* PERFECT UNCROPPED FIT */
+            transition: transform 0.5s ease; border-radius: 8px;
+        }
+        .memory-card:hover .memory-image { transform: scale(1.05); }
+        .memory-overlay {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            background: linear-gradient(to top, rgba(216, 67, 21, 0.95), transparent);
+            padding: 30px 24px 24px; transform: translateY(100%); transition: transform 0.3s ease; text-align: center;
+        }
+        .memory-card:hover .memory-overlay { transform: translateY(0); }
+        .memory-caption { color: var(--white); font-size: 1.1rem; font-weight: 600; margin: 0 0 8px 0; }
+
+        /* --- NEW: 6-GRID QUALITIES (Why You're The Best) --- */
+        .qualities-section { padding: 100px 0; background: var(--white); }
+        .qualities-grid { 
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; 
+            max-width: 1100px; margin: 0 auto; 
+        }
+        .quality-card {
+            background: var(--white); padding: 40px 30px; border-radius: 20px; text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06); transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid #fef0f0;
+        }
+        .quality-card:hover { transform: translateY(-8px); box-shadow: 0 12px 32px rgba(244, 143, 177, 0.2); }
+        .quality-icon {
+            width: 70px; height: 70px; margin: 0 auto 24px; background: var(--primary-grad);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            color: var(--white); font-size: 1.8rem; box-shadow: 0 4px 10px rgba(244, 143, 177, 0.3);
+        }
+        .quality-title { font-size: 1.3rem; font-weight: 700; color: var(--dark-red); margin-bottom: 16px; }
+        .quality-description { font-size: 0.95rem; color: #666; line-height: 1.7; }
+
+        /* --- 7 REASONS GENERATOR --- */
+        .reasons-section { padding: 100px 20px; background: var(--dark-brown); color: white; text-align: center; }
+        .reasons-container {
+            max-width: 700px; margin: 30px auto 0; padding: 60px 40px;
+            border: 2px solid #ffa726; border-radius: 16px;
+            background: rgba(255,255,255,0.05); min-height: 150px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        #reason-text {
+            font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-style: italic;
+            transition: opacity 0.5s ease; opacity: 1; margin-bottom: 30px; color: var(--white);
+        }
+        .btn-gold {
+            background: var(--primary-grad); color: var(--white); border: none; padding: 15px 40px;
+            font-family: 'Montserrat', sans-serif; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 2px; border-radius: 30px; cursor: pointer; transition: transform 0.3s;
+            box-shadow: 0 4px 15px rgba(244, 143, 177, 0.4);
+        }
+        .btn-gold:hover { transform: scale(1.05); }
+
+        /* --- WISHES & VIDEO --- */
+        .wishes-wrapper { padding: 100px 0; background: var(--bg-warm); }
+        .video-container { max-width: 800px; margin: 0 auto 80px; position: relative; padding-bottom: 56.25%; border-radius: 16px; overflow: hidden; box-shadow: 0 12px 32px rgba(0,0,0,0.15); border: 4px solid var(--white); }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+        .wishes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1000px; margin: 0 auto;}
+        .wish-card { background: var(--white); padding: 40px; border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.05); text-align: left;}
+        .wish-card i { color: #ffa726; font-size: 2rem; margin-bottom: 15px; }
+        .wish-text { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; font-style: italic; color: var(--dark-brown); margin-bottom: 15px; line-height: 1.6;}
+        .wish-author { font-weight: 700; color: var(--dark-red); text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem; }
+
+        /* --- RIBBON & LETTER SECTION --- */
+        .seal-section { padding: 100px 20px; background: var(--white); text-align: center; position: relative; overflow: hidden;}
+        
+        .ribbon-wrapper { position: relative; width: 100%; max-width: 600px; height: 100px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; }
+        .ribbon-line { position: absolute; width: 50%; height: 12px; background: var(--primary-grad); top: 50%; transform: translateY(-50%); transition: transform 1.2s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 1s; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .ribbon-left { left: 0; border-radius: 4px 0 0 4px; }
+        .ribbon-right { right: 0; border-radius: 0 4px 4px 0; }
+        .ribbon-center {
+            position: relative; z-index: 2; width: 60px; height: 60px; background: #ffffff;
+            transform: rotate(45deg); display: flex; align-items: center; justify-content: center;
+            transition: all 0.6s ease; box-shadow: 0 0 20px rgba(244, 143, 177, 0.6); border: 4px solid #f48fb1;
+        }
+        .ribbon-wrapper:hover .ribbon-center { transform: rotate(135deg) scale(1.1); }
+        .ribbon-wrapper.untied .ribbon-left { transform: translate(-100%, -50%); opacity: 0; }
+        .ribbon-wrapper.untied .ribbon-right { transform: translate(100%, -50%); opacity: 0; }
+        .ribbon-wrapper.untied .ribbon-center { transform: rotate(225deg) scale(0); opacity: 0; pointer-events: none; }
+        
+        .hidden-letter { max-height: 0; overflow: hidden; opacity: 0; transition: max-height 2s ease-in-out, opacity 1.5s ease-in-out; max-width: 800px; margin: 0 auto; position: relative; z-index: 5; }
+        .hidden-letter.open { max-height: 1500px; opacity: 1; margin-top: 20px; }
+        
+        .letter-decoration { position: absolute; top: -15px; left: -15px; right: -15px; bottom: -15px; background: linear-gradient(135deg, #ffebee, #fff3e0); border-radius: 24px; z-index: 0; transform: rotate(-2deg); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .letter-content { position: relative; z-index: 1; background: var(--white); padding: 60px; border-radius: 16px; box-shadow: 0 12px 48px rgba(0,0,0,0.1); text-align: left; }
+        .letter-greeting { font-size: 2.5rem; font-weight: 700; color: var(--dark-red); margin-bottom: 30px; font-family: 'Cormorant Garamond', serif; }
+        .letter-paragraph { font-size: 1.15rem; line-height: 2; color: var(--dark-brown); margin-bottom: 24px; text-align: justify; }
+        .letter-signature { font-size: 2.5rem; font-weight: 600; color: var(--dark-red); font-family: 'Cormorant Garamond', serif; font-style: italic; text-align: right; margin-top: 40px; }
+
+        /* --- FINAL HEARTBEAT SECTION --- */
+        .final-section { padding: 100px 20px; background: var(--primary-grad); text-align: center; color: var(--white); }
+        .final-heart { font-size: 4rem; margin-bottom: 30px; animation: heartbeat 2s ease-in-out infinite; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2)); }
+        .final-title { font-size: 3.5rem; font-weight: 800; margin-bottom: 24px; text-shadow: 2px 4px 8px rgba(0,0,0,0.2); }
+
+        /* --- MUSIC BUTTON --- */
+        .music-player {
+            position: fixed; bottom: 30px; left: 30px; z-index: 9999; width: 60px; height: 60px; border-radius: 50%;
+            background: var(--primary-grad); color: white; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; box-shadow: 0 8px 24px rgba(244, 143, 177, 0.4); font-size: 1.5rem; border: none;
+        }
+        .music-player.playing i { animation: spin 4s linear infinite; }
+        
+        /* Animations */
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        @keyframes heartbeat { 0%, 100% { transform: scale(1); } 25% { transform: scale(1.1); } 50% { transform: scale(1); } 75% { transform: scale(1.05); } }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(60px); } to { opacity: 1; transform: translateY(0); } }
+        .particle { position: fixed; top: -10px; pointer-events: none; z-index: 9999; animation: fall linear forwards; }
+        @keyframes fall { to { transform: translateY(105vh) rotate(720deg); } }
+
+        @media (max-width: 1024px) {
+            .memory-grid { grid-template-columns: repeat(2, 1fr); }
+            .qualities-grid { grid-template-columns: repeat(2, 1fr); }
+            .timeline-item.left .timeline-content, .timeline-item.right .timeline-content { flex-direction: column; padding: 0; text-align: center; }
+            .timeline::before { left: 30px; }
+            .timeline-icon { left: 30px; }
+        }
+        @media (max-width: 768px) {
+            .hero-title { font-size: 3rem; }
+            .memory-grid, .qualities-grid { grid-template-columns: 1fr; }
+            .letter-content { padding: 40px 24px; }
+            .timeline-image { width: 100%; height: 250px; }
+            .slider-container { height: 350px; }
+            .img-wrapper { height: 300px; }
+            .timeline-text { padding: 25px; }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="lang-toggle" id="langBtn" onclick="toggleLanguage()">Read in Hinglish</button>
+
+    <audio id="bgMusic" loop>
+        <source src="song.mp3" type="audio/mpeg">
+    </audio>
+
+    <button class="music-player" id="musicBtn" onclick="toggleMusic()">
+        <i class="fas fa-music"></i>
+    </button>
+
+    <section class="hero-section" style="background-image: url('https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&q=80');">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-hearts">
+                <i class="fas fa-heart floating-heart"></i>
+                <i class="fas fa-heart floating-heart delay-1"></i>
+                <i class="fas fa-heart floating-heart delay-2"></i>
+            </div>
+            <h1 class="hero-title trans" data-en="25 Years of Love" data-hin="25 Saalon Ka Pyaar">25 Years of Love</h1>
+            <p class="hero-subtitle trans" data-en="Celebrating Sanjay & Amita" data-hin="Celebrating Sanjay & Amita">Celebrating Sanjay & Amita</p>
+            <div class="hero-date">2001 - 2026</div>
+            <p class="hero-message trans" data-en="A quarter-century of love, laughter, and beautiful memories" data-hin="Pyaar, hasi aur khoobsurat yaadon ke 25 saal">A quarter-century of love, laughter, and beautiful memories</p>
+        </div>
+    </section>
+
+    <div class="chronometer-section">
+        <div class="container">
+            <h2 class="section-title trans" data-en="Time Together" data-hin="Ek Saath Bitaya Waqt" style="margin-bottom: 0;">Time Together</h2>
+            <p class="section-subtitle trans" data-en="Since Feb 20, 2001" data-hin="20 Feb 2001 Se">Since Feb 20, 2001</p>
+            <div class="time-grid">
+                <div class="time-box"><div class="time-number" id="t-years">00</div><div class="time-label trans" data-en="Years" data-hin="Saal">Years</div></div>
+                <div class="time-box"><div class="time-number" id="t-days">000</div><div class="time-label trans" data-en="Days" data-hin="Din">Days</div></div>
+                <div class="time-box"><div class="time-number" id="t-hours">00</div><div class="time-label trans" data-en="Hours" data-hin="Ghante">Hours</div></div>
+                <div class="time-box"><div class="time-number" id="t-mins">00</div><div class="time-label trans" data-en="Mins" data-hin="Minute">Mins</div></div>
+                <div class="time-box"><div class="time-number" id="t-secs">00</div><div class="time-label trans" data-en="Secs" data-hin="Second">Secs</div></div>
+            </div>
+        </div>
+    </div>
+
+    <section class="comparison-section">
+        <div class="container">
+            <h2 class="section-title trans" data-en="A Beautiful Evolution" data-hin="Ek Khoobsurat Safar">A Beautiful Evolution</h2>
+            <p class="section-subtitle trans" data-en="Drag the slider to look back at where it all began." data-hin="Peeche mud kar dekhein, kahan se shuru hui thi hamari kahani.">Drag the slider to look back at where it all began.</p>
+            <div class="slider-container" id="image-slider">
+                <img class="slider-img img-after" src="image5.jpg" alt="Now">
+                <img class="slider-img img-before" id="img-before" src="image1.jpg" alt="Then">
+                <div class="slider-handle" id="slider-handle">
+                    <div class="slider-handle-circle"><i class="fas fa-arrows-alt-h"></i></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="timeline-section">
+        <div class="container">
+            <h2 class="section-title trans" data-en="Our Journey Together" data-hin="Hamari Kahani">Our Journey Together</h2>
+            <p class="section-subtitle trans" data-en="Milestones that shaped our beautiful story" data-hin="Wo pal jinhone hamari kahani banayi">Milestones that shaped our beautiful story</p>
+            
+            <div class="timeline">
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <div class="timeline-icon"><i class="fas fa-heart"></i></div>
+                        <div class="timeline-image"><img src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8" alt="Wedding"></div>
+                        <div class="timeline-text">
+                            <span class="timeline-year">2001</span>
+                            <h3 class="timeline-title trans" data-en="The Wedding Day" data-hin="Shaadi Ka Din">The Wedding Day</h3>
+                            <p class="timeline-description trans" data-en="Two hearts became one. The beginning of a beautiful journey together that would span decades of love, growth, and unwavering commitment." data-hin="Do dil ek hue. Ek khoobsurat safar ki shuruwat jisme pyar aur vishwas hamesha barkarar raha.">Two hearts became one. The beginning of a beautiful journey together that would span decades of love, growth, and unwavering commitment.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <div class="timeline-icon"><i class="fas fa-baby"></i></div>
+                        <div class="timeline-image"><img src="https://images.unsplash.com/photo-1552819289-824d37ca69d2" alt="Baby"></div>
+                        <div class="timeline-text">
+                            <span class="timeline-year">2002</span>
+                            <h3 class="timeline-title trans" data-en="Samay's Arrival" data-hin="Samay Ka Aana">Samay's Arrival</h3>
+                            <p class="timeline-description trans" data-en="A new chapter begins. You became parents and our lives were forever changed with love and purpose." data-hin="Ek naya chapter shuru hua. Aap parents bane aur hamari zindagi pyaar aur maksad se bhar gayi.">A new chapter begins. You became parents and our lives were forever changed with love and purpose.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <div class="timeline-icon"><i class="fas fa-users"></i></div>
+                        <div class="timeline-image"><img src="https://images.pexels.com/photos/16381747/pexels-photo-16381747.jpeg" alt="Family"></div>
+                        <div class="timeline-text">
+                            <span class="timeline-year">2003</span>
+                            <h3 class="timeline-title trans" data-en="Sajal's Arrival" data-hin="Sajal Ka Aana">Sajal's Arrival</h3>
+                            <p class="timeline-description trans" data-en="Our family became complete with another precious addition. Two brothers, one beautiful family, all bound by your incredible love." data-hin="Pariwar poora hua. Do bhai, ek khubsurat family, jo aapke bemisaal pyar se judi hai.">Our family became complete with another precious addition. Two brothers, one beautiful family, all bound by your incredible love.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <div class="timeline-icon"><i class="fas fa-home"></i></div>
+                        <div class="timeline-image"><img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa" alt="Home"></div>
+                        <div class="timeline-text">
+                            <span class="timeline-year">2013</span>
+                            <h3 class="timeline-title trans" data-en="Buying the house" data-hin="Ghar Khareedna">Buying the house</h3>
+                            <p class="timeline-description trans" data-en="Planting roots in Jabalpur." data-hin="Jabalpur mein apni jaden jamana.">Planting roots in Jabalpur.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <div class="timeline-icon"><i class="fas fa-plane"></i></div>
+                        <div class="timeline-image"><img src="https://images.unsplash.com/photo-1615920292619-d7ff7ce76d50" alt="Trip"></div>
+                        <div class="timeline-text">
+                            <span class="timeline-year trans" data-en="Years Between" data-hin="In Saalon Mein">Years Between</span>
+                            <h3 class="timeline-title trans" data-en="Trips & Teertha Yatras" data-hin="Ghoomna aur Teertha Yatrayein">Trips & Teertha Yatras</h3>
+                            <p class="timeline-description trans" data-en="We created unforgettable memories, trying new things, and growing closer as a family." data-hin="Humne un-bhoolne wali yaadein banayi, nayi cheezein try ki, aur as a family aur kareeb aaye.">We created unforgettable memories, trying new things, and growing closer as a family.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <div class="timeline-icon"><i class="fas fa-hammer"></i></div>
+                        <div class="timeline-image"><img src="https://images.pexels.com/photos/5082865/pexels-photo-5082865.jpeg" alt="Milestone"></div>
+                        <div class="timeline-text">
+                            <span class="timeline-year">2017</span>
+                            <h3 class="timeline-title trans" data-en="Another Milestone" data-hin="Ek Aur Naya Kadam">Another Milestone</h3>
+                            <p class="timeline-description trans" data-en="Building home. Not just a house, but a home filled with love, laughter, and countless cherished moments." data-hin="Ghar banana. Sirf ek makaan nahi, balki pyar, hasi aur an-ginti pyare lamhon se bhara ek ghar.">Building home. Not just a house, but a home filled with love, laughter, and countless cherished moments.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <div class="timeline-icon"><i class="fas fa-graduation-cap"></i></div>
+                        <div class="timeline-image"><img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644" alt="Education"></div>
+                        <div class="timeline-text">
+                            <span class="timeline-year">2020-2022</span>
+                            <h3 class="timeline-title trans" data-en="A Proud Moment" data-hin="Garv Ka Pal">A Proud Moment</h3>
+                            <p class="timeline-description trans" data-en="Samay & Sajal got into their colleges and stepped out for education." data-hin="Samay aur Sajal apne colleges gaye aur padhai ke liye bahar kadam rakha.">Samay & Sajal got into their colleges and stepped out for education.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <div class="timeline-icon"><i class="fas fa-glass-cheers"></i></div>
+                        <div class="timeline-image"><img src="https://images.unsplash.com/photo-1475503572774-15a45e5d60b9" alt="Today"></div>
+                        <div class="timeline-text">
+                            <span class="timeline-year trans" data-en="Today" data-hin="Aaj">Today</span>
+                            <h3 class="timeline-title trans" data-en="Silver Jubilee" data-hin="Silver Jubilee">Silver Jubilee</h3>
+                            <p class="timeline-description trans" data-en="25 years of marriage, full of love and joy and being together." data-hin="Pyaar, khushi aur hamesha sath nibhane ke 25 saal.">25 years of marriage, full of love and joy and being together.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="memory-section">
+        <div class="container">
+            <h2 class="section-title trans" data-en="Precious Memories" data-hin="Yaadon Ka Khazana">Precious Memories</h2>
+            <p class="section-subtitle trans" data-en="A collection of moments that made our family special" data-hin="Wo pal jinhone hamari family ko khaas banaya">A collection of moments that made our family special</p>
+            
+            <div class="memory-grid">
+                <div class="memory-card">
+                    <div class="memory-image-wrapper"><img src="image2.jpg" alt="Memory" class="memory-image"></div>
+                    <div class="memory-overlay"><p class="memory-caption trans" data-en="Family Time" data-hin="Family Time">Family Time</p></div>
+                </div>
+                <div class="memory-card">
+                    <div class="memory-image-wrapper"><img src="image3.jpg" alt="Memory" class="memory-image"></div>
+                    <div class="memory-overlay"><p class="memory-caption trans" data-en="Smiles" data-hin="Muskurahatein">Smiles</p></div>
+                </div>
+                <div class="memory-card">
+                    <div class="memory-image-wrapper"><img src="image4.jpg" alt="Memory" class="memory-image"></div>
+                    <div class="memory-overlay"><p class="memory-caption trans" data-en="Together" data-hin="Ek Saath">Together</p></div>
+                </div>
+                <div class="memory-card">
+                    <div class="memory-image-wrapper"><img src="image6.jpg" alt="Memory" class="memory-image"></div>
+                    <div class="memory-overlay"><p class="memory-caption trans" data-en="Forever" data-hin="Hamesha">Forever</p></div>
+                </div>
+                <div class="memory-card">
+                    <div class="memory-image-wrapper"><img src="image7.jpg" alt="Memory" class="memory-image"></div>
+                    <div class="memory-overlay"><p class="memory-caption trans" data-en="Joy" data-hin="Khushi">Joy</p></div>
+                </div>
+                <div class="memory-card">
+                    <div class="memory-image-wrapper"><img src="image8.jpg" alt="Memory" class="memory-image"></div>
+                    <div class="memory-overlay"><p class="memory-caption trans" data-en="Love" data-hin="Pyaar">Love</p></div>
+                </div>
+                <div class="memory-card">
+                    <div class="memory-image-wrapper"><img src="image9.jpg" alt="Memory" class="memory-image"></div>
+                    <div class="memory-overlay"><p class="memory-caption trans" data-en="Blessings" data-hin="Aashirwaad">Blessings</p></div>
+                </div>
+                <div class="memory-card">
+                    <div class="memory-image-wrapper"><img src="image10.jpg" alt="Memory" class="memory-image"></div>
+                    <div class="memory-overlay"><p class="memory-caption trans" data-en="Warmth" data-hin="Apnapan">Warmth</p></div>
+                </div>
+                <div class="memory-card">
+                    <div class="memory-image-wrapper"><img src="image11.jpg" alt="Memory" class="memory-image"></div>
+                    <div class="memory-overlay"><p class="memory-caption trans" data-en="Home" data-hin="Ghar">Home</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="qualities-section">
+        <div class="container">
+            <h2 class="section-title trans" data-en="Why You're The Best" data-hin="Aap Dono Best Kyun Ho">Why You're The Best</h2>
+            <p class="section-subtitle trans" data-en="The countless reasons we're grateful for you" data-hin="Kyun hum aapko apna idol mante hain">The countless reasons we're grateful for you</p>
+            
+            <div class="qualities-grid">
+                <div class="quality-card">
+                    <div class="quality-icon"><i class="fas fa-heart"></i></div>
+                    <h3 class="quality-title trans" data-en="Unconditional Love" data-hin="Be-shart Pyaar">Unconditional Love</h3>
+                    <p class="quality-description trans" data-en="You've loved us through every phase of life, celebrating our successes and supporting us through challenges. Your love has never wavered." data-hin="Aapne hume har mod par pyaar diya, hamari kamyabi ka jashn manaya aur har mushkil mein saath diya. Aapka pyaar hamesha atoot raha hai.">You've loved us through every phase of life, celebrating our successes and supporting us through challenges. Your love has never wavered.</p>
+                </div>
+                <div class="quality-card">
+                    <div class="quality-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3 class="quality-title trans" data-en="Unwavering Support" data-hin="Atoot Saath">Unwavering Support</h3>
+                    <p class="quality-description trans" data-en="From school projects to life decisions, you've always been our biggest cheerleaders, believing in us even when we didn't believe in ourselves." data-hin="School projects se lekar life decisions tak, aap hamesha hamare sabse bade supporter rahe ho, hum par tab bhi bharosa kiya jab hume khud par nahi tha.">From school projects to life decisions, you've always been our biggest cheerleaders, believing in us even when we didn't believe in ourselves.</p>
+                </div>
+                <div class="quality-card">
+                    <div class="quality-icon"><i class="fas fa-star"></i></div>
+                    <h3 class="quality-title trans" data-en="Leading by Example" data-hin="Ek Sahi Misaal">Leading by Example</h3>
+                    <p class="quality-description trans" data-en="You've shown us what commitment, respect, and partnership look like. Your relationship is the blueprint for what we hope to achieve." data-hin="Aapne hume sikhaya ki commitment aur respect kya hoti hai. Aapka rishta hamare liye wo blueprint hai jise hum apni zindagi mein achieve karna chahte hain.">You've shown us what commitment, respect, and partnership look like. Your relationship is the blueprint for what we hope to achieve.</p>
+                </div>
+                <div class="quality-card">
+                    <div class="quality-icon"><i class="fas fa-camera"></i></div>
+                    <h3 class="quality-title trans" data-en="Creating Memories" data-hin="Yaadein Banana">Creating Memories</h3>
+                    <p class="quality-description trans" data-en="Every vacation, every family dinner, every holiday tradition - you've made sure our childhood was filled with joy and love." data-hin="Har chhutti, har family dinner, har chota-bada tyohar - aapne yeh ensure kiya ki hamara bachpan khushi aur pyaar se bhara ho.">Every vacation, every family dinner, every holiday tradition - you've made sure our childhood was filled with joy and love.</p>
+                </div>
+                <div class="quality-card">
+                    <div class="quality-icon"><i class="fas fa-bolt"></i></div>
+                    <h3 class="quality-title trans" data-en="Strength & Resilience" data-hin="Himmat aur Hausla">Strength & Resilience</h3>
+                    <p class="quality-description trans" data-en="You've faced challenges together and emerged stronger. Your resilience has taught us that together, anything is possible." data-hin="Aapne har mushkil ka milkar samna kiya. Aapki himmat ne hume sikhaya hai ki ek sath milkar kuch bhi mumkin hai.">You've faced challenges together and emerged stronger. Your resilience has taught us that together, anything is possible.</p>
+                </div>
+                <div class="quality-card">
+                    <div class="quality-icon"><i class="fas fa-gift"></i></div>
+                    <h3 class="quality-title trans" data-en="Endless Sacrifice" data-hin="An-ginti Balidaan">Endless Sacrifice</h3>
+                    <p class="quality-description trans" data-en="You've put our needs before your own countless times. Your selflessness and dedication to our family is truly inspiring." data-hin="Aapne hamesha hamari zarooraton ko apne se aage rakha. Is family ke liye aapka dedication sach mein bahut inspiring hai.">You've put our needs before your own countless times. Your selflessness and dedication to our family is truly inspiring.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="reasons-section">
+        <div class="container">
+            <h2 class="trans" data-en="7 Reasons We Love You" data-hin="7 Kaaran Kyun Hum Aapse Pyaar Karte Hain" style="color: var(--gold); font-size: 2.5rem; margin-bottom: 10px;">7 Reasons We Love You</h2>
+            <div class="reasons-container">
+                <div id="reason-text">"For always putting our family first, no matter what and caring for us."</div>
+                <button class="btn-gold trans" id="reasonBtn" data-en="Read Another" data-hin="Aur Padhein" onclick="generateReason(false)">Read Another</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="wishes-wrapper">
+        <div class="container">
+            <h2 class="section-title trans" data-en="A Special Message" data-hin="Ek Khaas Sandesh">A Special Message</h2>
+            <div class="video-container"><iframe src="https://www.youtube.com/embed/5w3u1kvxQvI?rel=0" allowfullscreen></iframe></div>
+            
+            <h2 class="section-title trans" data-en="Words of Love" data-hin="Pyaar Bhare Alfaaz" style="margin-top: 80px;">Words of Love</h2>
+            <div class="wishes-grid">
+                <div class="wish-card"><i class="fas fa-quote-left"></i><div class="wish-text trans" data-en='"Happy 25th Anniversary Mummy papa, love you!!"' data-hin='"Mummy Papa ko 25th Anniversary ki dher saari badhai, love you!!"'>"Happy 25th Anniversary Mummy papa, love you!!"</div><div class="wish-author">— Samay</div></div>
+                <div class="wish-card"><i class="fas fa-quote-left"></i><div class="wish-text trans" data-en='"Wishing you endless joy on your special day, love you!!"' data-hin='"Aapke is khaas din par dher saari khushiyon ki duayein, love you!!"'>"Wishing you endless joy on your special day, love you!!"</div><div class="wish-author">— Sajal</div></div>
+                <div class="wish-card"><i class="fas fa-quote-left"></i><div class="wish-text trans" data-en='""' data-hin='""'>""</div><div class="wish-author">— [Name]</div></div>
+                <div class="wish-card"><i class="fas fa-quote-left"></i><div class="wish-text trans" data-en='""' data-hin='""'>""</div><div class="wish-author">— [Name]</div></div>
+                <div class="wish-card"><i class="fas fa-quote-left"></i><div class="wish-text trans" data-en='""' data-hin='""'>""</div><div class="wish-author">— [Name]</div></div>
+                <div class="wish-card"><i class="fas fa-quote-left"></i><div class="wish-text trans" data-en='""' data-hin='""'>""</div><div class="wish-author">— [Name]</div></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="seal-section">
+        <div class="container">
+            <div class="ribbon-wrapper" id="ribbon-btn" onclick="untieRibbon()">
+                <div class="ribbon-line ribbon-left"></div>
+                <div class="ribbon-line ribbon-right"></div>
+                <div class="ribbon-center"><i class="fas fa-envelope" style="color: var(--dark-red); font-size: 1.5rem;"></i></div>
+            </div>
+            <p class="trans" id="ribbon-prompt" data-en="LETTER HERE...Tap to untie the ribbon to read the letter" data-hin="Letter...Ribbon kholke letter padhne ke liye tap karein, " style="font-weight: bold; color: var(--dark-red); letter-spacing: 2px; text-transform: uppercase;">LETTER HERE...Tap to untie the ribbon to read the letter </p>
+            
+            <div class="hidden-letter" id="anniversary-letter">
+                <div class="letter-decoration"></div>
+                <div class="letter-content">
+                    <h2 class="letter-greeting trans" data-en="Dearest Mummy & Papa," data-hin="Pyaare Mummy & Papa,">Dearest Mummy & Papa,</h2>
+                    <p class="letter-paragraph trans" data-en="We may not always say it out loud, but we see everything you do. We see the sacrifices you've made to give us a good life, the patience you've shown in raising us, and the quiet, unwavering strength you bring to our family every single day." data-hin="Hum shayad hamesha bol kar na batayein, par aap hamare liye jo kuch bhi karte hain, hum sab dekhte hain. Hume ek achhi life dene ke liye aapke sacrifices, hume bada karne mein aapka patience, aur is family ko di aayi aapki shant lekin atoot taqat, hum sab samajhte hain.">
+                        We may not always say it out loud, but we see everything you do. We see the sacrifices you've made to give us a good life, the patience you've shown in raising us, and the quiet, unwavering strength you bring to our family every single day.
+                    </p>
+                    <p class="letter-paragraph trans" data-en="Reaching 25 years is an incredible milestone. It takes true patience, forgiveness, and a love that is stronger than any hardship. The way you've lived these 25 years is what genuinely inspires us." data-hin="25 saal sath bitana ek bahut bada milestone hai. Iske liye sachha patience, forgiveness, aur ek aisi mohabbat chahiye jo har mushkil se badi ho. Jis tarah se aapne ye 25 saal jiye hain, wo hume sach mein inspire karta hai.">
+                        Reaching 25 years is an incredible milestone. It takes true patience, forgiveness, and a love that is stronger than any hardship. The way you've lived these 25 years is what genuinely inspires us.
+                    </p>
+                    <p class="letter-paragraph trans" data-en="May the coming years bring you as much joy as you have given us. Happy 25th Marriage Anniversary. We love you both endlessly." data-hin="Aane wale saal aapki zindagi mein utni hi khushiyaan layein jitni aapne hume di hain. Happy 25th Marriage Anniversary. Hum dono aapse bahut pyaar karte hain.">
+                        May the coming years bring you as much joy as you have given us. Happy 25th Marriage Anniversary. We love you both endlessly.
+                    </p>
+                    <div class="letter-signature">
+                        <span class="trans" data-en="With all our love," data-hin="Dher saare pyaar ke saath,">With all our love,</span><br>
+                        <span style="font-size: 3rem; color: var(--gold);">Samay & Sajal</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<section class="final-section">
+        <div class="container">
+            <i class="fas fa-heart final-heart"></i>
+            <h2 class="final-title trans" data-en="Happy 25th Anniversary" data-hin="Happy 25th Anniversary">Happy 25th Anniversary</h2>
+            <p class="trans" data-en="Here's to 25 more years of love, laughter, and happiness together. We love you more than words can express." data-hin="Pyaar aur khushiyon ke agle 25 saalon ke liye. Hum aapse bahut pyaar karte hain." style="font-size: 1.5rem; font-weight: 300;">
+                Here's to 25 more years of love, laughter, and happiness together. We love you more than words can express.
+            </p>
+            
+            <div style="margin-top: 50px; font-size: 1rem; color: rgba(255,255,255,0.7); font-family: 'Space Mono', monospace; letter-spacing: 1px;">
+                <i class="fas fa-eye" style="margin-right: 5px;"></i> Family & Friends Visited: <span id="view-count" style="color: var(--white); font-weight: bold;">...</span>
+            </div>
+        </div>
+    </section>
+    <script>
+        // --- TRANSLATION LOGIC ---
+        let isHinglish = false;
+        
+        // Exact 7 reasons maintained from your previous code
+        const reasonsEn = [
+            "For always putting our family first, no matter what and caring for us.",
+            "For Mummy's amazing food and Papa's advices and for providing us everything.",
+            "For making our home feel like the safest place.",
+            "For the endless patience you showed us while we were growing up.",
+            "For showing us what a true, resilient partnership looks like.",
+            "For celebrating our small wins like they were the big deals.",
+            "For simply being the best parents we could have ever asked for."
+        ];
+        
+        const reasonsHin = [
+            "Hamesha hamare pariwar ko sabse aage rakhne aur hamari care karne ke liye.",
+            "Mummy ke tasty khane aur Papa ki best advices ke liye.",
+            "Hamare ghar ko duniya ki sabse safe jagah banane ke liye.",
+            "Hamare bade hote waqt apna itna patience dikhane ke liye.",
+            "Hume sikhane ke liye ki ek sachi aur mazboot partnership kaisi hoti hai.",
+            "Hamari choti choti jeet ko bade tyohar ki tarah manane ke liye.",
+            "Duniya ke sabse best Mummy-Papa hone ke liye."
+        ];
+
+        function toggleLanguage() {
+            isHinglish = !isHinglish;
+            document.getElementById('langBtn').innerText = isHinglish ? 'Read in English' : 'Read in Hinglish';
+            document.querySelectorAll('.trans').forEach(el => {
+                el.innerHTML = isHinglish ? el.getAttribute('data-hin') : el.getAttribute('data-en');
+            });
+            generateReason(true); 
+        }
+
+        // --- CHRONOMETER ---
+        const weddingDate = new Date("February 20, 2001 00:00:00").getTime();
+        function updateChronometer() {
+            const now = new Date().getTime();
+            const diff = now - weddingDate;
+            const secs = Math.floor(diff / 1000), mins = Math.floor(secs / 60), hrs = Math.floor(mins / 60), days = Math.floor(hrs / 24), years = Math.floor(days / 365);
+            document.getElementById("t-years").innerText = years;
+            document.getElementById("t-days").innerText = days % 365;
+            document.getElementById("t-hours").innerText = (hrs % 24).toString().padStart(2, '0');
+            document.getElementById("t-mins").innerText = (mins % 60).toString().padStart(2, '0');
+            document.getElementById("t-secs").innerText = (secs % 60).toString().padStart(2, '0');
+        }
+        setInterval(updateChronometer, 1000); updateChronometer();
+
+        // --- MUSIC ---
+        const bgMusic = document.getElementById("bgMusic");
+        const musicBtn = document.getElementById("musicBtn");
+        let isPlaying = false;
+        function toggleMusic() {
+            if (isPlaying) { bgMusic.pause(); musicBtn.classList.remove("playing"); }
+            else { bgMusic.play(); musicBtn.classList.add("playing"); document.getElementById("musicHint").style.display = "none"; }
+            isPlaying = !isPlaying;
+        }
+
+        // --- SLIDER ---
+        const slider = document.getElementById('image-slider');
+        const imgBefore = document.getElementById('img-before');
+        const handle = document.getElementById('slider-handle');
+        let isDragging = false;
+        function slide(e) {
+            if (!isDragging) return;
+            let rect = slider.getBoundingClientRect();
+            let x = (e.clientX || e.touches[0].clientX) - rect.left;
+            x = Math.max(0, Math.min(x, rect.width));
+            let percent = (x / rect.width) * 100;
+            imgBefore.style.width = percent + '%';
+            handle.style.left = percent + '%';
+        }
+        handle.addEventListener('mousedown', () => isDragging = true);
+        window.addEventListener('mouseup', () => isDragging = false);
+        window.addEventListener('mousemove', slide);
+        handle.addEventListener('touchstart', () => isDragging = true, {passive: true});
+        window.addEventListener('touchend', () => isDragging = false);
+        window.addEventListener('touchmove', slide, {passive: true});
+
+        // --- REASONS ---
+        let currentReason = 0;
+        function generateReason(justUpdateLanguage = false) {
+            const el = document.getElementById('reason-text');
+            const activeArray = isHinglish ? reasonsHin : reasonsEn;
+            if (justUpdateLanguage) { el.innerText = `"${activeArray[currentReason]}"`; return; }
+            el.style.opacity = 0;
+            setTimeout(() => {
+                currentReason = (currentReason + 1) % activeArray.length;
+                el.innerText = `"${activeArray[currentReason]}"`;
+                el.style.opacity = 1;
+            }, 500); 
+        }
+        generateReason(true);
+
+        // --- RIBBON & LETTER REVEAL ---
+        function untieRibbon() {
+            const ribbonBtn = document.getElementById('ribbon-btn');
+            const prompt = document.getElementById('ribbon-prompt');
+            const letter = document.getElementById('anniversary-letter');
+            
+            ribbonBtn.classList.add('untied');
+            prompt.style.opacity = 0;
+            
+            setTimeout(() => { 
+                ribbonBtn.style.display = 'none'; 
+                prompt.style.display = 'none';
+                letter.classList.add('open'); 
+                createShower(); 
+            }, 1000);
+        }
+
+        function createShower() {
+            const colors = ['#f48fb1', '#ffa726', '#ffffff']; 
+            for (let i = 0; i < 80; i++) {
+                setTimeout(() => {
+                    const p = document.createElement('div');
+                    p.classList.add('particle');
+                    p.style.width = (Math.random() * 10 + 5) + 'px';
+                    p.style.height = p.style.width;
+                    p.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    p.style.left = Math.random() * 100 + 'vw';
+                    p.style.borderRadius = '50%';
+                    p.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                    document.body.appendChild(p);
+                    setTimeout(() => p.remove(), 5000);
+                }, i * 50); 
+            }
+        }
+    
+    // --- GLOBAL VISITOR COUNTER ---
+        // Uses a free API to track total page views across all devices
+        function updateCounter() {
+            // A unique ID for your parents' anniversary page
+            const counterNamespace = "mummypapa25th_samaysajal"; 
+            const counterName = "page_visits";
+
+            fetch(`https://api.counterapi.dev/v1/${counterNamespace}/${counterName}/up`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('view-count').innerText = data.count;
+                })
+                .catch(error => {
+                    console.log("Counter error", error);
+                    document.getElementById('view-count').innerText = "❤️"; // Beautiful fallback if API is slow
+                });
+        }
+        
+        // Run the counter when the page loads
+        updateCounter();
+    </script>
+</body>
+</html>
